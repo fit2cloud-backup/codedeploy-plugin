@@ -1,0 +1,16 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:section title="FIT2CLOUD账号设置">
+        <f:entry title="FIT2CLOUD的Consumer Key" field="f2cApiKey">
+          <f:textbox/>
+        </f:entry>
+        <f:entry title="FIT2CLOUD的Secret Key" field="f2cApiSecret">
+          <f:password/>
+        </f:entry>
+        <f:entry title="FIT2CLOUD的API EndPoint" field="f2cRestApiEndpoint">
+          <f:textbox default="https://console.fit2cloud.com:8443/rest/" />
+        </f:entry>
+        <f:validateButton
+        			title="验证账户" progress="验证中..."
+        			method="checkAccount" with="f2cApiKey,f2cApiSecret,f2cRestApiEndpoint" />
+    </f:section>
+</j:jelly>

@@ -1,0 +1,10 @@
+<div>
+    <ul>
+        <li>下载地址中支持使用Jenkins内部变量，如：${BUILD_NUMBER} ${POM_VERSION}等。</li>
+        <li>如果为OSS仓库，不需要填写OSS下载地址的Endpoint部分，例如：http://f2c.oss-cn-hangzhou.aliyuncs.com/sample/1.0/testsamle.zip 填写内容为：${POM_ARTIFACTID}/${POM_VERSION}/${POM_ARTIFACTID}.zip</li>
+        <li>如果为nexus仓库，下载地址为全路径。例如：http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/com/fit2cloud/example/ci-demo-app/1.0/ci-demo-app-1.0-13.zip
+            填写内容为：http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/com/fit2cloud/example/${POM_ARTIFACTID}/${POM_VERSION}/${POM_ARTIFACTID}-${POM_VERSION}-${BUILD_NUMBER}.zip</li>
+        <li>如果为无仓库，下载地址为全路径。填写方式与nexus一致。</li>
+        具体的使用，强烈推荐仔细参考FIT2CLOUD代码部署中的地址。
+    </ul>
+</div>

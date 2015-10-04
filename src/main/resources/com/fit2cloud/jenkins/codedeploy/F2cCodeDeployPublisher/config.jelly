@@ -1,0 +1,47 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="注册应用版本">
+
+        <f:entry title="仓库名称" field="repoName">
+        <f:textbox checkUrl="'${rootURL}/publisher/F2cCodeDeployPublisher/checkRepoName?val='+encodeURIComponent(this.value)"/>
+        </f:entry>
+        <f:entry title="应用名称" field="appName">
+        <f:textbox checkUrl="'${rootURL}/publisher/F2cCodeDeployPublisher/checkAppName?val='+encodeURIComponent(this.value)"/>
+        </f:entry>
+        <f:entry title="应用版本名称" field="appVersionName">
+            <f:textbox checkUrl="'${rootURL}/publisher/F2cCodeDeployPublisher/checkAppVersionName?val='+encodeURIComponent(this.value)"
+            default="V${POM_VERSION}-${BUILD_NUMBER}.zip"/>
+        </f:entry>
+        <f:entry title="应用版本存放路径" field="downloadAddress">
+         <f:textbox checkUrl="'${rootURL}/publisher/F2cCodeDeployPublisher/checkDownloadAddress?val='+encodeURIComponent(this.value)"
+         default="${JOB_NAME}/${POM_VERSION}/${POM_ARTIFACTID}-${POM_VERSION}-${BUILD_NUMBER}.zip"/>
+        </f:entry>
+        <f:entry title="备注" field="description">
+            <f:textbox />
+        </f:entry>
+
+    </f:section>
+
+    <f:section title="触发代码部署">
+        <f:optionalBlock field="autoDeploy" title="使用自动部署" checked="${instance.getAutoDeploy()}" inline="true">
+
+          <f:entry title="目标集群名称" field="targetCluster" >
+            <f:textbox checkUrl="'${rootURL}/publisher/F2cCodeDeployPublisher/checkTargetCluster?val='+encodeURIComponent(this.value)"/>
+          </f:entry>
+
+          <f:entry title="目标虚机组名称" field="targetClusterRole">
+            <f:textbox />
+          </f:entry>
+          <f:entry title="目标虚机Id" field="targetVm">
+            <f:textbox />
+          </f:entry>
+          <f:entry title="部署策略" field="deployStrategy">
+              <f:select />
+          </f:entry>
+
+        </f:optionalBlock>
+    </f:section>
+    <f:validateButton
+                        			title="验证配置" progress="验证中..."
+                        			method="checkConfiguration" with="repoName,appName,autoDeploy,targetCluster,targetClusterRole,targetVm" />
+</j:jelly>
