@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
  * Created by zhangbohan on 15/9/22.
  */
 public class F2cCodeDeployPublisher extends Publisher {
-
+    private final String f2cApiKey;
+    private final String f2cApiSecret;
+    private final String f2cRestApiEndpoint;
     private final String repoName;
     private final String downloadAddress;
     private final String appName;
@@ -58,7 +60,13 @@ public class F2cCodeDeployPublisher extends Publisher {
                                   String targetCluster,
                                   String targetClusterRole,
                                   String targetVm,
-                                  String deployStrategy) {
+                                  String deployStrategy,
+                                  String f2cApiKey,
+                                  String f2cApiSecret,
+                                  String f2cRestApiEndpoint) {
+        this.f2cApiKey = f2cApiKey;
+        this.f2cApiSecret = f2cApiSecret;
+        this.f2cRestApiEndpoint = f2cRestApiEndpoint;
         this.repoName = repoName;
         this.downloadAddress = downloadAddress;
         this.appName = appName;
@@ -127,9 +135,9 @@ public class F2cCodeDeployPublisher extends Publisher {
 
         try {
             logger.println("开始注册新版本到FIT2CLOUD...");
-            Fit2CloudClient fit2CloudClient = new Fit2CloudClient(this.getDescriptor().f2cApiKey,
-                                                                this.getDescriptor().f2cApiSecret,
-                                                                this.getDescriptor().f2cRestApiEndpoint);
+            Fit2CloudClient fit2CloudClient = new Fit2CloudClient(this.f2cApiKey,
+                                                                this.f2cApiSecret,
+                                                                this.f2cRestApiEndpoint);
 
             if(repoName==null){
                 logger.println("仓库名无效,无法注册到FIT2CLOUD.");
@@ -151,9 +159,9 @@ public class F2cCodeDeployPublisher extends Publisher {
                     logger.println("版本信息无效,无法执行自动部署.");
                     success = false;
                 }else{
-                    Fit2CloudClient fit2CloudClient = new Fit2CloudClient(this.getDescriptor().f2cApiKey,
-                            this.getDescriptor().f2cApiSecret,
-                            this.getDescriptor().f2cRestApiEndpoint);
+                    Fit2CloudClient fit2CloudClient = new Fit2CloudClient(this.f2cApiKey,
+                            this.f2cApiSecret,
+                            this.f2cRestApiEndpoint);
                     Long targetVmLong = null;
                     if(targetVm != null){
                         targetVmLong = Long.parseLong(targetVm);
@@ -183,9 +191,6 @@ public class F2cCodeDeployPublisher extends Publisher {
 
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
-        private String f2cApiKey ;
-        private String f2cApiSecret;
-        private String f2cRestApiEndpoint;
 
         public DescriptorImpl() {
             super(F2cCodeDeployPublisher.class);
@@ -206,9 +211,6 @@ public class F2cCodeDeployPublisher extends Publisher {
 
         @Override
         public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
-            f2cApiKey = formData.getString("f2cApiKey");
-            f2cApiSecret = formData.getString("f2cApiSecret");
-            f2cRestApiEndpoint = formData.getString("f2cRestApiEndpoint");
             req.bindParameters(this);
             save();
             return super.configure(req, formData);
@@ -237,6 +239,9 @@ public class F2cCodeDeployPublisher extends Publisher {
         }
 
         public FormValidation doCheckConfiguration(
+                @QueryParameter String f2cApiKey,
+                @QueryParameter String f2cApiSecret,
+                @QueryParameter String f2cRestApiEndpoint,
                 @QueryParameter String repoName,
                 @QueryParameter String appName,
                 @QueryParameter boolean autoDeploy,
@@ -247,6 +252,16 @@ public class F2cCodeDeployPublisher extends Publisher {
 
 
             try {
+                if (StringUtils.isEmpty(f2cApiKey)) {
+                    return FormValidation.error("FIT2CLOUD ConsumerKey不能为空！");
+                }
+                if (StringUtils.isEmpty(f2cApiSecret)) {
+                    return FormValidation.error("FIT2CLOUD SecretKey不能为空！");
+                }
+                if (StringUtils.isEmpty(f2cRestApiEndpoint)) {
+                    return FormValidation.error("FIT2CLOUD EndPoint不能为空！");
+                }
+
                 Fit2CloudClient fit2CloudClient = new Fit2CloudClient(f2cApiKey,f2cApiSecret,f2cRestApiEndpoint);
                 if (!StringUtils.isEmpty(repoName)) {
                     ApplicationRepo applicationRepo = fit2CloudClient.getApplicationRepo(repoName);
@@ -375,29 +390,18 @@ public class F2cCodeDeployPublisher extends Publisher {
         }
 
 
-        public String getF2cApiKey() {
-            return f2cApiKey;
-        }
+    }
 
-        public void setF2cApiKey(String f2cApiKey) {
-            this.f2cApiKey = f2cApiKey;
-        }
+    public String getF2cApiKey() {
+        return f2cApiKey;
+    }
 
-        public String getF2cApiSecret() {
-            return f2cApiSecret;
-        }
+    public String getF2cApiSecret() {
+        return f2cApiSecret;
+    }
 
-        public void setF2cApiSecret(String f2cApiSecret) {
-            this.f2cApiSecret = f2cApiSecret;
-        }
-
-        public String getF2cRestApiEndpoint() {
-            return f2cRestApiEndpoint;
-        }
-
-        public void setF2cRestApiEndpoint(String f2cRestApiEndpoint) {
-            this.f2cRestApiEndpoint = f2cRestApiEndpoint;
-        }
+    public String getF2cRestApiEndpoint() {
+        return f2cRestApiEndpoint;
     }
 
     public String getRepoName() {

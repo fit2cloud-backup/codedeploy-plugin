@@ -8,7 +8,7 @@
   <artifactId>plugin</artifactId>
   <version>1.593</version>
 </parent>
-<version>0.1</version>
+<version>0.2</version>
 <packaging>hpi</packaging>
 <name>Fit2cloud CodeDeploy Plugin for Jenkins</name>
 <description>Register the build number to FIT2CLOUD,and trigger the code deploy.</description>
