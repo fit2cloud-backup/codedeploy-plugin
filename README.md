@@ -33,14 +33,15 @@ Jenkins是当前最常用的CI服务器，FIT2CLOUD CodeDeploy-Plugin for Jenkin
 2. 目标虚机组名称 (部署的目标虚机组的名称，请在 FIT2CLOUD控制台中 > 虚机组 查看列表中对应虚机组的名称。如果不填写，则默认部署到集群下的全部虚机组。)   
 3. 目标虚机Id (部署的目标虚机的ID，请在 FIT2CLOUD控制台中 > 虚机组 查看列表中对应虚机组的ID。如果不填写，则默认部署到虚机组下的全部虚机。)   
 4. 部署策略 (选择你希望使用的部署策略，与FIT2CLOUD中的部署策略相同。)   
-假设一个job的名称是test，用户的设置如下
+
+
+*假设一个job的名称是test，用户的设置如下:*  
 1. 仓库名称 repo-1   
 2. 应用名称 app-1   
 3. 应用版本名称 V${POM_VERSION}-Build_${BUILD_NUMBER}   
 4. 应用版本存放路径 http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/com/fit2cloud/example/${POM_ARTIFACTID}/${POM_VERSION}/${POM_ARTIFACTID}-${POM_VERSION}-${BUILD_NUMBER}.zip   
 5. 备注   
-
-#####触发代码部署配置信息:   
+触发代码部署配置信息:   
 1. 目标集群名称 cluster1   
 2. 目标虚机组名称 group1   
 3. 目标虚机Id   
