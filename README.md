@@ -6,7 +6,7 @@ Jenkins是当前最常用的CI服务器，FIT2CLOUD CodeDeploy-Plugin for Jenkin
 一、安装说明
 -------------------------
 
-插件下载地址：http://repository-proxy.fit2cloud.com:8080/content/repositories/releases/org/jenkins-ci/plugins/f2c-codedeploy/0.1/f2c-codedeploy-0.1.hpi
+插件下载地址：http://repository-proxy.fit2cloud.com:8080/content/repositories/releases/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi
 在Jenkins中安装插件, 请到 Manage Jenkins | Advanced | Upload，上传插件(.hpi文件)
 安装完毕后请重新启动Jenkins
 
