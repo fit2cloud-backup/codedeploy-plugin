@@ -25,6 +25,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -47,6 +48,7 @@ public class F2cCodeDeployPublisher extends Publisher {
     private final String targetClusterRole;
     private final String targetVm;
     private final String deployStrategy;
+    private final String noticeGroup;
 
     private PrintStream logger;
 
@@ -63,7 +65,8 @@ public class F2cCodeDeployPublisher extends Publisher {
                                   String deployStrategy,
                                   String f2cApiKey,
                                   String f2cApiSecret,
-                                  String f2cRestApiEndpoint) {
+                                  String f2cRestApiEndpoint,
+                                  String noticeGroup) {
         this.f2cApiKey = f2cApiKey;
         this.f2cApiSecret = f2cApiSecret;
         this.f2cRestApiEndpoint = f2cRestApiEndpoint;
@@ -86,12 +89,14 @@ public class F2cCodeDeployPublisher extends Publisher {
                 this.targetVm = targetVm;
             }
             this.deployStrategy = deployStrategy;
+            this.noticeGroup = noticeGroup;
         }else{
             this.autoDeploy = false;
             this.targetCluster = null;
             this.targetClusterRole = null;
             this.targetVm = null;
             this.deployStrategy = null;
+            this.noticeGroup = null;
         }
 
     }
@@ -143,7 +148,7 @@ public class F2cCodeDeployPublisher extends Publisher {
                 logger.println("仓库名无效,无法注册到FIT2CLOUD.");
                 return false;
             }
-            applicationRevision = fit2CloudClient.addApplicationRevision(newAppVersionName,description,appName,repoName,newAddress);
+            applicationRevision = fit2CloudClient.addApplicationRevision(newAppVersionName,description,appName,repoName,newAddress,null);
             success = true;
             logger.println("注册应用版本成功: 新版本Id是"+applicationRevision.getId());
         }catch (Exception e){
@@ -166,16 +171,67 @@ public class F2cCodeDeployPublisher extends Publisher {
                     if(targetVm != null){
                         targetVmLong = Long.parseLong(targetVm);
                     }
-                    fit2CloudClient.addDeployment(applicationRevision.getApplicationName()
+                    Long noticeGroupLong = null;
+                    if(noticeGroup != null){
+                        noticeGroupLong = Long.parseLong(noticeGroup);
+                    }
+                    this.logger.println("通知组如下:"+noticeGroupLong);
+
+                    ApplicationDeployment applicationDeployment = fit2CloudClient.addDeployment(applicationRevision.getApplicationName()
                             ,applicationRevision.getName()
                             ,targetCluster
                             ,targetClusterRole
                             ,targetVmLong
                             ,deployStrategy
-                            ,"Jenkins触发");
+                            ,"Jenkins触发"
+                            ,noticeGroupLong);
+
                     success = true;
+
+
                     logger.println("触发FIT2CLOUD代码部署成功。");
-                    logger.println("具体部署结果请登录FIT2CLOUD控制台查看。");
+//                    logger.println("具体部署结果请登录FIT2CLOUD控制台查看。");
+                    HashMap deploymentStatusMap = new HashMap();
+                    deploymentStatusMap.put("pendding", "等待部署");
+                    deploymentStatusMap.put("executing", "部署中");
+                    deploymentStatusMap.put("successed", "部署成功");
+                    deploymentStatusMap.put("failed", "部署失败");
+                    deploymentStatusMap.put("canceled", "取消部署");
+                    this.logger.println(applicationRevision.getApplicationName()+"的部署状态:");
+                    int i = 0;
+                    while(true) {
+                        try {
+                            Thread.sleep(20000);
+                        } catch (InterruptedException e) {
+                        }
+                        boolean allFinished = true;
+                        success = true;
+                        List<ApplicationDeploymentLog> logs = fit2CloudClient.getDeploymentLogs(applicationDeployment.getId());
+                        for(ApplicationDeploymentLog log : logs){
+                            this.logger.println("主机:"+log.getServerName()+ "->" +deploymentStatusMap.get(log.getStatus()));
+                            if(log.getStatus().equals("failed")){
+                                success = false;
+                            }
+                            if(log.getStatus().equals("executing")||log.getStatus().equals("pendding")){
+                                allFinished = false;
+                            }
+                        }
+                        if(allFinished){
+                            if(success){
+                                this.logger.println("部署成功！");
+                            }else{
+                                this.logger.println("部署失败！");
+                            }
+                            break;
+                        }
+                        i++;
+                        if(i>90){
+                            this.logger.println("部署超时,请查看FIT2CLOUD控制台！");
+                            break;
+                        }
+                    }
+
+
                 }
             }catch (Exception e){
                 this.logger.println("触发FIT2CLOUD代码部署失败，错误消息如下:");
@@ -442,5 +498,9 @@ public class F2cCodeDeployPublisher extends Publisher {
 
     public String getDeployStrategy() {
         return deployStrategy;
+    }
+
+    public String getNoticeGroup() {
+        return noticeGroup;
     }
 }

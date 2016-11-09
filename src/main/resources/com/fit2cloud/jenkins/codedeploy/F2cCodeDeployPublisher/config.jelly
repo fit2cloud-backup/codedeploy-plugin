@@ -52,6 +52,9 @@
           <f:entry title="部署策略" field="deployStrategy">
               <f:select />
           </f:entry>
+          <f:entry title="通知组Id" field="noticeGroup">
+              <f:textbox />
+            </f:entry>
 
         </f:optionalBlock>
     </f:section>
