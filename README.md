@@ -6,7 +6,7 @@ Jenkins是当前最常用的CI服务器，FIT2CLOUD CodeDeploy-Plugin for Jenkin
 一、安装说明
 -------------------------
 
-插件下载地址：http://repository-proxy.fit2cloud.com:8080/content/repositories/releases/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi
+插件下载地址：http://repository.fit2cloud.com/content/repositories/fit2cloud-public/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi
 在Jenkins中安装插件, 请到 Manage Jenkins | Advanced | Upload，上传插件(.hpi文件)
 安装完毕后请重新启动Jenkins
 
@@ -39,7 +39,7 @@ Jenkins是当前最常用的CI服务器，FIT2CLOUD CodeDeploy-Plugin for Jenkin
 1. 仓库名称 repo-1   
 2. 应用名称 app-1   
 3. 应用版本名称 V${POM_VERSION}-Build_${BUILD_NUMBER}   
-4. 应用版本存放路径 http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/com/fit2cloud/example/${POM_ARTIFACTID}/${POM_VERSION}/${POM_ARTIFACTID}-${POM_VERSION}-${BUILD_NUMBER}.zip   
+4. 应用版本存放路径 http://repository.fit2cloud.com/service/local/repositories/fit2cloud-public/content/com/fit2cloud/example/${POM_ARTIFACTID}/${POM_VERSION}/${POM_ARTIFACTID}-${POM_VERSION}-${BUILD_NUMBER}.zip   
 5. 备注   
 触发代码部署配置信息:   
 1. 目标集群名称 cluster1   
@@ -63,9 +63,9 @@ Jenkins是当前最常用的CI服务器，FIT2CLOUD CodeDeploy-Plugin for Jenkin
 -------------------------
 1. V0.1:  
 FIT2CLOUD代码部署插件第一个版本.
-如需使用该版本插件，可以从此下载：[http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/org/jenkins-ci/plugins/f2c-codedeploy/0.1/f2c-codedeploy-0.1.hpi](http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/org/jenkins-ci/plugins/f2c-codedeploy/0.1/f2c-codedeploy-0.1.hpi)
+如需使用该版本插件，可以从此下载：[http://repository.fit2cloud.com/service/local/repositories/fit2cloud-public/content/org/jenkins-ci/plugins/f2c-codedeploy/0.1/f2c-codedeploy-0.1.hpi](http://repository.fit2cloud.com/service/local/repositories/fit2cloud-public/content/org/jenkins-ci/plugins/f2c-codedeploy/0.1/f2c-codedeploy-0.1.hpi)
 2. V0.2:   
 去除系统配置中的FIT2CLOUD账号设置，并在每个Job的配置中增加FIT2CLOUD账号设置，以支持使用不同的FIT2CLOUD账号进行代码部署。
-如需使用该版本插件，可以从此下载：[http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi](http://repository-proxy.fit2cloud.com:8080/service/local/repositories/releases/content/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi)
+如需使用该版本插件，可以从此下载：[http://repository.fit2cloud.com/service/local/repositories/fit2cloud-public/content/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi](http://repository.fit2cloud.com/service/local/repositories/fit2cloud-public/content/org/jenkins-ci/plugins/f2c-codedeploy/0.2/f2c-codedeploy-0.2.hpi)
 
 如果有问题，请联系bohan@fit2cloud.com
